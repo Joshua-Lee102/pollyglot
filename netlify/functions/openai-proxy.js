@@ -13,7 +13,7 @@ exports.handler = async (event) => {
         messages: [
           {
             role: "system",
-            content: generatePrompt  // Prompt should likely include directives understood by the model
+            content: prompt  // Prompt should likely include directives understood by the model
           },
           {
             role: "user",
