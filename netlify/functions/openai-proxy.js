@@ -13,7 +13,7 @@ exports.handler = async (event) => {
         messages: [
           {
             role: "system",
-            content: prompt  // Prompt should likely include directives understood by the model
+            content: generatePrompt  // Prompt should likely include directives understood by the model
           },
           {
             role: "user",
@@ -31,8 +31,7 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify(response.data),
       headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*', // Be cautious with this in production
+        'Content-Type': 'application/json'
       }
     };
   } catch (error) {
