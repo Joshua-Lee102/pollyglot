@@ -40,32 +40,36 @@ export default function Body() {
 
   const handleTranslation = async (language) => {
     if (!inputText.trim()) return;
-
+  
     try {
-        const prompt = generatePrompt(inputText, language);
-
-        const response = await fetch('/.netlify/functions/openai', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ prompt })
-        });
-        const { message } = await response.json();
-        const translatedMessage = { text: message, sender: 'bot' };
-
-        setConversation(prev => [...prev, translatedMessage]);
-    } catch (error) {
-      console.log('Response received:', response); // Log the raw response
+      const prompt = generatePrompt(inputText, language);
+  
+      const response = await fetch('/.netlify/functions/openai', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt, inputText }) // Make sure to send the inputText if the Netlify function expects it
+      });
+      
+      // Check if response is ok before proceeding
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+  
+      // Assuming your function returns JSON with the translation in a 'message' property
       const responseData = await response.json();
-      console.log('Parsed JSON:', responseData); // Log the parsed JSON
+      const translatedMessage = { text: responseData.message, sender: 'bot' };
+  
+      setConversation(prev => [...prev, translatedMessage]);
+    } catch (error) {
+      console.error('Error translating message:', error);
+      // Handle any UI changes due to the error here
     }
-
+  
     setInputText('');
-};
+  };
+  
 
 
   const handleLanguageSelection = (language) => {
