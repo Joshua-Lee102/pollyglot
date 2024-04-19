@@ -7,13 +7,6 @@ import chinese from './imgs/china.png'
 import japanese from './imgs/japan.png'
 import arrow from './imgs/arrow-right-solid.svg'
 
-
-
-const openai = new OpenAI({
-  apiKey: import.meta.env.VITE_API_KEY,
-  dangerouslyAllowBrowser: true
-});
-
 const generatePrompt = (text, language) => {
   switch (language) {
     case 'English':
