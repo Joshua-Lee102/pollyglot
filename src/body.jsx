@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import OpenAI from 'openai';
 import english from './imgs/america.png'
 import spanish from './imgs/spain.png'
 import french from './imgs/france.png'
