@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Header from '/src/header'
-import Body from '/src/body'
+import Header from '/src/header.jsx'
+import Body from '/src/body.jsx'
 
 function App() {
   return (
