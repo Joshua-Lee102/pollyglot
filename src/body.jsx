@@ -56,7 +56,12 @@ export default function Body() {
 
         setConversation(prev => [...prev, translatedMessage]);
     } catch (error) {
-        console.error('Error translating message:', error);
+      console.log('Response received:', response); // Log the raw response
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      const responseData = await response.json();
+      console.log('Parsed JSON:', responseData); // Log the parsed JSON
     }
 
     setInputText('');
