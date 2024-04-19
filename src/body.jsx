@@ -50,33 +50,21 @@ export default function Body() {
     if (!inputText.trim()) return;
 
     try {
-      const prompt = generatePrompt(inputText, language);
+        const prompt = generatePrompt(inputText, language);
 
-      const response = await openai.chat.completions.create({
-        model: "gpt-4-turbo-2024-04-09",
-        messages: [
-          {
-            "role": "system",
-            "content": prompt
-          },
-          {
-            "role": "user",
-            "content": inputText
-          },
-        ],
-        temperature: 1,
-        max_tokens: 256,
-        top_p: 1,
-        frequency_penalty: 0,
-        presence_penalty: 0,
-      });
+        const response = await fetch('/.netlify/functions/openai', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ prompt })
+        });
+        const { message } = await response.json();
+        const translatedMessage = { text: message, sender: 'bot' };
 
-      const translation = response.choices[0].message.content.trim();
-      const translatedMessage = { text: translation, sender: 'bot' };
-
-      setConversation(prev => [...prev, translatedMessage]);
+        setConversation(prev => [...prev, translatedMessage]);
     } catch (error) {
-      console.error('Error translating message:', error);
+        console.error('Error translating message:', error);
     }
 
     setInputText('');
