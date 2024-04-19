@@ -31,7 +31,8 @@ exports.handler = async (event) => {
       statusCode: 200,
       body: JSON.stringify(response.data),
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*', // Be cautious with this in production
       }
     };
   } catch (error) {
