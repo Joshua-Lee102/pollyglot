@@ -44,7 +44,7 @@ export default function Body() {
     try {
       const prompt = generatePrompt(inputText, language);
   
-      const response = await fetch('/.netlify/functions/openai', {
+      const response = await fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
           method: 'POST',
           headers: {
               'Content-Type': 'application/json'
