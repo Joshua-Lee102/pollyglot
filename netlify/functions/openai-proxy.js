@@ -1,14 +1,15 @@
 const { OpenAI } = require('openai');
 
-exports.handler = async (event) => {
-    console.log("Event body:", event.body);  // This will log the entire event, including the body.
-
-    if (!event.body) {
-        return {
-            statusCode: 400,
-            body: JSON.stringify({ message: 'No data received' }),
-        };
-    }
+exports.handler = async function(event, context) {
+    return {
+        statusCode: 200,
+        headers: {
+            "Access-Control-Allow-Origin": "https://main--pollyglot-josh.netlify.app", // Adjust to match the client URL
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type"
+        },
+        body: JSON.stringify({ message: "CORS headers set!" })
+    };
 
     const { prompt, inputText } = JSON.parse(event.body);
 

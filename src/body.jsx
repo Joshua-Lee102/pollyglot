@@ -44,13 +44,16 @@ export default function Body() {
     try {
       const prompt = generatePrompt(inputText, language);
   
-      const response = await fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ prompt, inputText }) // Make sure to send the inputText if the Netlify function expects it
-      });
+      fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
+    method: 'GET', // or 'POST'
+    headers: {
+        'Content-Type': 'application/json'
+    }
+      })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.error('Error:', error));
+
       
       // Check if response is ok before proceeding
       if (!response.ok) {
