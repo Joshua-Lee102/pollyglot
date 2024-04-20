@@ -44,14 +44,35 @@ export default function Body() {
     try {
       const prompt = generatePrompt(inputText, language);
   
-      const response = await fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ prompt, inputText }) // Make sure to send the inputText if the Netlify function expects it
-      });
-      
+      // const response = await fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
+      //     method: 'POST',
+      //     headers: {
+      //         'Content-Type': 'application/json'
+      //     },
+      //     body: JSON.stringify({ prompt, inputText }) // Make sure to send the inputText if the Netlify function expects it
+      // });
+
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions ', {
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + OPENAI_API_KEY,
+        },
+        method: 'POST',
+        body: JSON.stringify({
+          model: "gpt-4-turbo-2024-04-09",
+          messages: [
+              { role: "system", content: prompt },
+              { role: "user", content: inputText },
+          ],
+          temperature: 1,
+          max_tokens: 256,
+          top_p: 1,
+          frequency_penalty: 0,
+          presence_penalty: 0,
+        }),
+    })
+    
       // Check if response is ok before proceeding
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
