@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import OpenAI from 'openai'
 import english from './imgs/america.png'
 import spanish from './imgs/spain.png'
 import french from './imgs/france.png'
@@ -6,6 +7,11 @@ import korean from './imgs/korea.png'
 import chinese from './imgs/china.png'
 import japanese from './imgs/japan.png'
 import arrow from './imgs/arrow-right-solid.svg'
+
+const openai = new OpenAI({
+  apiKey: import.meta.env.VITE_API_KEY,
+  dangerouslyAllowBrowser: true
+});
 
 const generatePrompt = (text, language) => {
   switch (language) {
@@ -40,38 +46,40 @@ export default function Body() {
 
   const handleTranslation = async (language) => {
     if (!inputText.trim()) return;
-  
+
     try {
       const prompt = generatePrompt(inputText, language);
-  
-      const response = await fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/json'
+
+      const response = await openai.chat.completions.create({
+        model: "gpt-4-turbo-2024-04-09",
+        messages: [
+          {
+            "role": "system",
+            "content": prompt
           },
-          body: JSON.stringify({ prompt, inputText }) // Make sure to send the inputText if the Netlify function expects it
+          {
+            "role": "user",
+            "content": inputText
+          },
+        ],
+        temperature: 1,
+        max_tokens: 256,
+        top_p: 1,
+        frequency_penalty: 0,
+        presence_penalty: 0,
       });
-      
-      // Check if response is ok before proceeding
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      // Assuming your function returns JSON with the translation in a 'message' property
-      const responseData = await response.json();
-      const translatedMessage = { text: responseData.message, sender: 'bot' };
-  
+
+      const translation = response.choices[0].message.content.trim();
+      const translatedMessage = { text: translation, sender: 'bot' };
+
       setConversation(prev => [...prev, translatedMessage]);
     } catch (error) {
       console.error('Error translating message:', error);
-      // Handle any UI changes due to the error here
     }
-  
+
     setInputText('');
-  };
+};
   
-
-
   const handleLanguageSelection = (language) => {
     setCurrentLanguage(language);
   };
