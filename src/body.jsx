@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import OpenAI from 'https://deno.land/x/openai@v4.38.2/mod.ts'
+import OpenAI from 'openai'
 import english from './imgs/america.png'
 import spanish from './imgs/spain.png'
 import french from './imgs/france.png'
