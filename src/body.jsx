@@ -1,35 +1,35 @@
-import React, { useState, useRef, useEffect } from 'react';
-import english from './imgs/america.png';
-import spanish from './imgs/spain.png';
-import french from './imgs/france.png';
-import korean from './imgs/korea.png';
-import chinese from './imgs/china.png';
-import japanese from './imgs/japan.png';
-import arrow from './imgs/arrow-right-solid.svg';
+import React, { useState, useRef, useEffect } from 'react'
+import english from './imgs/america.png'
+import spanish from './imgs/spain.png'
+import french from './imgs/france.png'
+import korean from './imgs/korea.png'
+import chinese from './imgs/china.png'
+import japanese from './imgs/japan.png'
+import arrow from './imgs/arrow-right-solid.svg'
 
 const generatePrompt = (text, language) => {
   switch (language) {
     case 'English':
-      return `Translate the following text to English: ${text}`;
+      return `Translate the following text to English: ${text}`
     case 'Spanish':
-      return `Translate the following text to Spanish: ${text}`;
+      return `Translate the following text to Spanish: ${text}`
     case 'French':
-      return `Translate the following text to French: ${text}`;
+      return `Translate the following text to French: ${text}`
     case 'Korean':
-      return `Translate the following text to Korean and romanize it: ${text}`;
+        return `Translate the following text to Korean and romanize it and nothing else: ${text}`
     case 'Chinese':
-      return `Translate the following text to Chinese (Mandarin) and show pinyin: ${text}`;
+      return `Translate the following text to Chinese (Mandarin) and show pinyin and nothing else: ${text}`
     case 'Japanese':
-      return `Translate the following text to Japanese and show Romaji: ${text}`;
+      return `Translate the following text to Japanese and show Romaji and nothing else: ${text}`;
     default:
       return text;
   }
 };
 
 export default function Body() {
-  const [inputText, setInputText] = useState('');
-  const [conversation, setConversation] = useState([]);
-  const [currentLanguage, setCurrentLanguage] = useState('English');
+  const [inputText, setInputText] = useState('')
+  const [conversation, setConversation] = useState([])
+  const [currentLanguage, setCurrentLanguage] = useState('English')
   const endOfMessagesRef = useRef(null);
 
   useEffect(() => {
@@ -40,36 +40,44 @@ export default function Body() {
 
   const handleTranslation = async (language) => {
     if (!inputText.trim()) return;
-
-    const prompt = generatePrompt(inputText, language);
-
-    fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
-      method: 'POST', // Assuming it should be POST to send data
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ prompt: prompt }) // Assuming you need to send data
-    })
-    .then(response => {
+  
+    try {
+      const prompt = generatePrompt(inputText, language);
+  
+      const response = await fetch('https://pollyglot-josh.netlify.app/.netlify/functions/openai-proxy', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ prompt, inputText }) // Make sure to send the inputText if the Netlify function expects it
+      });
+      
+      // Check if response is ok before proceeding
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return response.json();
-    })
-    .then(data => {
-      const translatedMessage = { text: data.message, sender: 'bot' }; // Assuming data.message holds the translation
+  
+      // Assuming your function returns JSON with the translation in a 'message' property
+      const responseData = await response.json();
+      const translatedMessage = { text: responseData.message, sender: 'bot' };
+  
       setConversation(prev => [...prev, translatedMessage]);
-    })
-    .catch(error => {
+    } catch (error) {
       console.error('Error translating message:', error);
       // Handle any UI changes due to the error here
-    });
-
+    }
+  
     setInputText('');
   };
+  
+
 
   const handleLanguageSelection = (language) => {
     setCurrentLanguage(language);
+  };
+
+  const handleButtonClick = (language) => {
+    handleLanguageSelection(language);
   };
 
   const getButtonClass = (language) => {
@@ -77,8 +85,8 @@ export default function Body() {
   };
 
   const handleInput = (event) => {
-    setInputText(event.target.value);
-  }
+      setInputText(event.target.value)
+    }
 
   const handleSend = () => {
     if (inputText.trim() && currentLanguage) {
@@ -95,7 +103,7 @@ export default function Body() {
       <div className="conversation">
             {conversation.map((message, index) => (
                 <div key={index} className={`message ${message.sender === 'user' ? 'user-text' : 'bot-text'} chat-bubbles`}>
-                    <p className="message-text">{message.text}</p>
+                    <p className= "message-text">{message.text}</p>
                 </div>
             ))}
       <div ref={endOfMessagesRef}></div>
@@ -122,26 +130,26 @@ export default function Body() {
       </div>
 
       <div className="buttons">
-          <button className={getButtonClass('English')} onClick={() => handleLanguageSelection('English')}>
+          <button className = {getButtonClass('English')} onClick={() => handleLanguageSelection('English')}>
             <img src={english} alt="American Flag" className="language-img"/>
           </button>
-          <button className={getButtonClass('Spanish')} onClick={() => handleLanguageSelection('Spanish')}>
+          <button className =  {getButtonClass('Spanish')} onClick={() => handleLanguageSelection('Spanish')}>
             <img src={spanish} alt="Spanish Flag" className="language-img"/>
           </button>
-          <button className={getButtonClass('French')} onClick={() => handleLanguageSelection('French')}>
+          <button className =  {getButtonClass('French')} onClick={() => handleLanguageSelection('French')}>
             <img src={french} alt="French Flag" className="language-img"/>
           </button>
-          <button className={getButtonClass('Korean')} onClick={() => handleLanguageSelection('Korean')}>
+          <button className = {getButtonClass('Korean')} onClick={() => handleLanguageSelection('Korean')}>
             <img src={korean} alt="Korean Flag" className="language-img"/>
           </button>
-          <button className={getButtonClass('Chinese')} onClick={() => handleLanguageSelection('Chinese')}>
+          <button className =  {getButtonClass('Chinese')} onClick={() => handleLanguageSelection('Chinese')}>
             <img src={chinese} alt="Chinese Flag" className="language-img"/>
           </button>
-          <button className={getButtonClass('Japanese')} onClick={() => handleLanguageSelection('Japanese')}>
+          <button className =  {getButtonClass('Japanese')} onClick={() => handleLanguageSelection('Japanese')}>
             <img src={japanese} alt="Japanese Flag" className="language-img"/>
           </button>
       </div>
       {currentLanguage && <p className="translation-notice">Currently translating to: {currentLanguage}</p>}
-    </div>
-  );
+  </div>
+  )
 }
