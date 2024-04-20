@@ -1,4 +1,4 @@
-const { Configuration, OpenAIApi } = require('openai');
+const { OpenAI } = require('openai');
 
 exports.handler = async (event) => {
     console.log("Event body:", event.body);  // This will log the entire event, including the body.
@@ -12,9 +12,9 @@ exports.handler = async (event) => {
 
     const { prompt, inputText } = JSON.parse(event.body);
 
-    const openai = new OpenAIApi(new Configuration({
-        apiKey: process.env.OPENAI_API_KEY,
-    }));
+    const openai = new OpenAI({
+        apiKey: process.env.OPENAI_API_KEY // This is also the default, can be omitted
+      });
 
     try {
         const response = await openai.completions.create({
