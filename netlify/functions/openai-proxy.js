@@ -1,4 +1,4 @@
-const OpenAI = require('openai');
+import OpenAI from 'https://deno.land/x/openai@v4.38.2/mod.ts';
 
 exports.handler = async function(event, context) {
     if (event.httpMethod === "OPTIONS") {
