@@ -8,7 +8,6 @@ html, body {
   display: block;
   margin: 0 auto;
   padding: 0;
-  max-width: 400px;
   font-family: "Poppins";
   background: #343E50;
 }
@@ -23,6 +22,7 @@ html, body {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 0;
 }
 
 .parrot{
@@ -73,8 +73,7 @@ html, body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-top: 4px solid #252F42;
-  margin: 2.5em .5em;
+  margin: 1.5em .5em;
 }
 
 .body-text{
@@ -107,6 +106,7 @@ html, body {
   color: #333;
   margin-right: auto;
   margin-bottom: 1.5em;
+  margin-left: .65em;
   animation: slideUp 0.5s ease-out forwards;
 }
 
@@ -116,6 +116,7 @@ html, body {
   color: #FFF;
   margin-bottom: 1.5em;
   margin-left: auto;
+  margin-right: .65em;
   animation: slideUp 0.5s ease-out forwards; 
 }
 
@@ -138,6 +139,10 @@ html, body {
   margin: 0 .5em 1em .5em;
 }
 
+.input:focus{
+  outline-width: 0;
+}
+
 .arrow{
   position: absolute; 
   right: 1.35em; 
@@ -154,7 +159,8 @@ html, body {
   width: 100%;
   display: flex; 
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: space-evenly;
+  margin: 0 2em;
 }
 
 .language-btn{
