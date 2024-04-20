@@ -12,6 +12,7 @@ exports.handler = async (event) => {
 
     const { prompt, inputText } = JSON.parse(event.body);
 
+
     const openai = new OpenAI({
         apiKey: process.env.OPENAI_API_KEY // This is also the default, can be omitted
       });
@@ -20,9 +21,15 @@ exports.handler = async (event) => {
         const response = await openai.completions.create({
             model: "gpt-4-turbo-2024-04-09",
             messages: [
-                { role: "system", content: prompt },
-                { role: "user", content: inputText },
-            ],
+                {
+                  "role": "system",
+                  "content": prompt
+                },
+                {
+                  "role": "user",
+                  "content": inputText
+                },
+              ],
             temperature: 1,
             max_tokens: 256,
             top_p: 1,
