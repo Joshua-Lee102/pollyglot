@@ -1,7 +1,7 @@
 const { Configuration, OpenAIApi } = require('openai');
 
 exports.handler = async (event) => {
-    console.log("Received event:", event);  // This will log the entire event, including the body.
+    console.log("Event body:", event.body);  // This will log the entire event, including the body.
 
     if (!event.body) {
         return {
