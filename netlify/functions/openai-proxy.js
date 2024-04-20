@@ -46,7 +46,7 @@ exports.handler = async function(event, context) {
                 'Content-Type': 'application/json',
                 "Access-Control-Allow-Origin": "*"
             },
-            body: JSON.stringify({ message: response.choices[0].message.content.trim() })
+            body: JSON.stringify({ message: response.choices[0].text})
         };
     } catch (error) {
         console.error('OpenAI API error:', error);
